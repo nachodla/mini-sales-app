@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: sales-backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - sqlite-data:/app/data
+    environment:
+      - PORT=4000
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: sales-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  sqlite-data:
